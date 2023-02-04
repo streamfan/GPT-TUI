@@ -1,5 +1,11 @@
 # GPT-TUI
-A TUI to interact with ChatGPT
+A TUI to interact with ChatGPT!
+
+This is a reactive application that runs entirely in your terminal.
+It will adjust to the window size dynamically as well as font size.
+
+It uses [Textual](https://www.textualize.io/) and [Rich](https://github.com/Textualize/rich) for formatting outputs.
+
 
 # Authentication
 
@@ -13,6 +19,15 @@ All API requests should include your API key in an `Authorization` HTTP header a
 ```
 Authorization: Bearer YOUR_API_KEY
 ```
+
+From here you'll need to place your auth token into the `.env` file.
+
+If you're unsure about the formatting you can do:
+```BASH
+cp .env.example .env
+```
+
+And then just replace with your key.
 
 # Development
 
@@ -33,18 +48,21 @@ gh repo clone streamfan/GPT-TUI
 
 ## Dependencies
 
-You will need the following dependencies
+You can get away with just running `poetry shell` and `poetry install`.
 
-## Textual
-
-You can install textual using [poetry]() or by doing:
+From there you can simply run:
 ```BASH
-pip install "textual[dev]"
+python main.py
+```
+
+Or if you prefer using the `textual` CLI you can do:
+```BASH
+textual run main.py
 ```
 
 ### Poetry
 
-You'll need [poetry]()
+You'll need [poetry](https://python-poetry.org/docs/)
 
 ```BASH
 curl -sSL https://install.python-poetry.org | python3 -
@@ -54,3 +72,11 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 See docs on how to install docker:
 https://docs.docker.com/get-docker/
+
+
+### Textual
+
+You can install textual using [poetry](https://python-poetry.org/docs/) or by doing:
+```BASH
+pip install "textual[dev]"
+```
