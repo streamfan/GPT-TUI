@@ -9,6 +9,10 @@ packages = [{include = "gpt_tui"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 textual = {extras = ["dev"], version = "^0.10.1"}
+httpx = "^0.23.3"
+openapi = "^1.1.0"
+python-dotenv = "^0.21.1"
+openai = "^0.26.4"
 
 
 [build-system]

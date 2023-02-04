@@ -1,6 +1,19 @@
 # GPT-TUI
 A TUI to interact with ChatGPT
 
+# Authentication
+
+The OpenAI API uses API keys for authentication. Visit your [API Keys page](https://platform.openai.com/account/api-keys) to retrieve the API key you'll use in your requests.
+
+*Remember that your API key is a secret! Do not share it with others or expose it in any client-side code (browsers, apps).*
+
+Production requests must be routed through your own backend server where your API key can be securely loaded from an environment variable or key management service.
+
+All API requests should include your API key in an `Authorization` HTTP header as follows:
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
 # Development
 
 Git HTTPS Clone:
