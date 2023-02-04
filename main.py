@@ -54,7 +54,7 @@ class PromptResponse(Static):
 
         # animate typing the response
         for i in range(len(result)):
-            self.update(result[:i])
+            self.update(Markdown(result[:i]))
             await asyncio.sleep(0.01)
         
         self.update(Markdown(result))
