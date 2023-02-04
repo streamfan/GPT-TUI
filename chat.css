@@ -1,0 +1,40 @@
+Screen {
+    background: $panel;
+}
+
+Input {
+    dock: bottom;
+    margin: 1 0;
+}
+
+Prompt {
+    background: #343541;
+    min-height: 5;
+    content-align: center middle;
+    text-style: bold;
+    margin-left: 0;
+    padding-left: 5;
+    padding-right: 5;
+    min-height: 8;
+}
+
+PromptResponse {
+    background: #444654;
+    min-height: 5;
+    content-align: center middle;
+    text-style: bold;
+    margin-left: 0;
+    padding-left: 2;
+    padding-right: 5;
+    padding-bottom: 2;
+    min-height: 8;
+    width: 100%;
+    padding-top: 2;
+}
+
+PreviousPrompts {
+    dock: left;
+    width: 20%;
+    height: 90%;
+    background: #202123;
+}

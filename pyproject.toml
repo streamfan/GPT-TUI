@@ -13,6 +13,7 @@ httpx = "^0.23.3"
 openapi = "^1.1.0"
 python-dotenv = "^0.21.1"
 openai = "^0.26.4"
+asgiref = "^3.6.0"
 
 
 [build-system]
