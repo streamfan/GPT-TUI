@@ -68,10 +68,23 @@ You'll need [poetry](https://python-poetry.org/docs/)
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
+Once installed you can then create a virtual environment and connect to the shell by doing:
+```BASH
+poetry shell
+```
+
+And then install the dependencies by running:
+```BASH
+poetry install
+```
+
 ### Docker
+
+This TUI can be ran entirely in-container interactively, as well as over SSH.
 
 See docs on how to install docker:
 https://docs.docker.com/get-docker/
+
 
 
 ### Textual
