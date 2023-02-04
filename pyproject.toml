@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "A TUI to interact with ChatGPT"
 authors = ["Graham Hough <graham@hough.io>"]
 readme = "README.md"
-packages = [{include = "gpt_tui"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
