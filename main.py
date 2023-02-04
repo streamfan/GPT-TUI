@@ -5,11 +5,6 @@ import os
 import asyncio
 from asgiref.sync import sync_to_async
 
-try:
-    import httpx
-except ImportError:
-    raise ImportError("Please install httpx with 'pip install httpx' ")
-
 from rich.markdown import Markdown
 
 from textual.app import App, ComposeResult
