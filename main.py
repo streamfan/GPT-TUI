@@ -25,7 +25,22 @@ load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
 class PreviousPrompts(Static):
-    pass
+    """Siderail to display previous prompt sessions"""
+    previous_prompts: list[str] = []
+
+    async def update_previous_prompts(self, input_prompt: str):
+        self.previous_prompts.append(input_prompt)
+
+        rail_markdown = ""
+        # print the previous prompts to the siderail in markdown
+        for prompt in self.previous_prompts:
+            # build a single markdown string
+            rail_markdown += f"# {prompt} \n"
+        
+        # update the siderail
+        self.update(Markdown(rail_markdown))
+
+        log(f"previous prompts: {self.previous_prompts}")
 
 class Prompt(Static):
     pass
@@ -59,7 +74,6 @@ class ChatGPTui(App):
 
     CSS_PATH = "chat.css"
 
-    previous_prompts: list[str] = []
     number_of_prompts: int = 0
 
     def compose(self) -> ComposeResult:
@@ -75,16 +89,19 @@ class ChatGPTui(App):
         """A coroutine to handle a text changed message."""
         if message == "":
             return
-        self.action_add_prompt(message.value)
+        await self.action_add_prompt(message.value)
         await self.action_add_response(message.value)
     
-    def action_add_prompt(self, input_prompt: str) -> None:
+    async def action_add_prompt(self, input_prompt: str) -> None:
         """adds a prompt to the prompt list"""
         prompt = Prompt(input_prompt)
         self.mount(prompt)
         self.call_after_refresh(self.screen.scroll_end, animate=False)
         self.number_of_prompts += 1
-        self.previous_prompts.append(input_prompt)
+
+        # update the previous prompts
+        await self.query_one(PreviousPrompts).update_previous_prompts(input_prompt)
+
         # get the number of characters in the prompt
         prompt_length = len(input_prompt)
 
@@ -97,6 +114,7 @@ class ChatGPTui(App):
         """adds a response to the response list"""
         response = PromptResponse(Markdown("Thinking..."), name=f"response_{self.number_of_prompts}")
         self.mount(response)
+        response.focus()
         await response.send_prompt(input_response)
 
 if __name__ == "__main__":
