@@ -8,7 +8,7 @@ from asgiref.sync import sync_to_async
 from rich.markdown import Markdown
 
 from textual.app import App, ComposeResult
-from textual.containers import Content
+from textual.containers import Content, Container, Horizontal, Vertical
 from textual.widgets import Static, Input, Footer
 from textual.color import Color
 
@@ -24,17 +24,22 @@ from dotenv import load_dotenv
 load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
+
 class Examples(Static):
     pass
+
 
 class Capabilities(Static):
     pass
 
+
 class Limitations(Static):
     pass
 
+
 class PreviousPrompts(Static):
     """Siderail to display previous prompt sessions"""
+
     previous_prompts: list[str] = []
 
     async def update_previous_prompts(self, input_prompt: str):
@@ -45,14 +50,16 @@ class PreviousPrompts(Static):
         for prompt in self.previous_prompts:
             # build a single markdown string
             rail_markdown += f"# {prompt} \n"
-        
+
         # update the siderail
         self.update(Markdown(rail_markdown))
 
         log(f"previous prompts: {self.previous_prompts}")
 
+
 class Prompt(Static):
     pass
+
 
 class PromptResponse(Static):
 
@@ -61,11 +68,11 @@ class PromptResponse(Static):
     def __init__(self):
         super().__init__("")
         self._spinner = Spinner("material")
-    
+
     def on_mount(self) -> None:
         """Called when app starts."""
         self.update_render = self.set_interval(1 / 60, self.update_spinner)
-    
+
     def update_spinner(self) -> None:
         """Updates the spinner."""
         if self.response == "":
@@ -84,15 +91,16 @@ class PromptResponse(Static):
         )
         log(f"completion: {completion} {type(completion)}")
 
-        result  = completion.choices[0].text
+        result = completion.choices[0].text
         self.response = result
 
         # animate typing the response
         for i in range(len(result)):
             self.update(Markdown(result[:i]))
             await asyncio.sleep(0.01)
-        
+
         self.update(Markdown(result))
+
 
 class ChatGPTui(App):
     """Sends a prompt to openai's api and displays the response."""
@@ -104,7 +112,10 @@ class ChatGPTui(App):
     def compose(self) -> ComposeResult:
         yield Input(placeholder="Enter a prompt...")
         yield PreviousPrompts(id="previous_prompts")
-    
+        yield Container(
+            Vertical(id="prompts_and_responses"),
+        )
+
     def on_mount(self) -> None:
         """Called when app starts."""
         # Give the input focus, so we can start typing straight away
@@ -116,11 +127,11 @@ class ChatGPTui(App):
             return
         await self.action_add_prompt(message.value)
         await self.action_add_response(message.value)
-    
+
     async def action_add_prompt(self, input_prompt: str) -> None:
         """adds a prompt to the prompt list"""
         prompt = Prompt(input_prompt, expand=True)
-        self.mount(prompt)
+        self.query_one("#prompts_and_responses").mount(prompt)
         self.call_after_refresh(self.screen.scroll_end, animate=False)
         self.number_of_prompts += 1
 
@@ -133,14 +144,14 @@ class ChatGPTui(App):
         for i in range(prompt_length):
             # delete the last character in the prompt
             self.query_one(Input).action_delete_left()
-        
-    
+
     async def action_add_response(self, input_response: str) -> None:
         """adds a response to the response list"""
         response = PromptResponse()
-        self.mount(response)
+        self.query_one("#prompts_and_responses").mount(response)
         response.focus()
         await response.send_prompt(input_response)
+
 
 if __name__ == "__main__":
     app = ChatGPTui()

@@ -1,6 +1,6 @@
 Screen {
     layout: grid;
-    grid-size: 4 4;
+    grid-size: 8 8;
     grid-rows: 1fr;
     grid-columns: 1fr;
     background: $panel;
@@ -8,8 +8,23 @@ Screen {
 
 Input {
     dock: bottom;
-    row-span: 3;
-    column-span: 2;
+    row-span: 8;
+    column-span: 1;
+}
+
+Container {
+    column-span: 6;
+    row-span: 8;
+    height: 100%;
+    background: #343541;
+}
+
+#prompts_and_responses > Vertical{
+    width: 100%;
+    column-span: 6;
+    row-span: 8;
+    height: 100%;
+    background: #202123;
 }
 
 Prompt {
@@ -20,34 +35,31 @@ Prompt {
     margin-left: 0;
     padding-left: 5;
     padding-right: 5;
-    column-span: 3;
-    height: 100%;
 }
 
 PromptResponse {
+    overflow-y: scroll;
     background: #444654;
     min-height: 5;
     content-align: center middle;
     text-style: bold;
-    margin-left: 0;
     padding-left: 2;
     padding-right: 5;
     padding-bottom: 2;
     width: 100%;
-    padding-top: 2;
-    column-span: 3;
-    height: 100%;
+    padding-top: 1;
+    column-span: 6;
+    row-span: 3;
 }
 
 PreviousPrompts {
-    row-span: 4;
-    column-span: 1;
+    row-span: 8;
+    column-span: 2;
     height: 100%;
     background: #202123;
 }
 
 Examples {
-    dock: left;
     width: 20%;
     height: 90%;
     background: #202123;
