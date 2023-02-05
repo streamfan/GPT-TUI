@@ -24,6 +24,15 @@ from dotenv import load_dotenv
 load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
+class Examples(Static):
+    pass
+
+class Capabilities(Static):
+    pass
+
+class Limitations(Static):
+    pass
+
 class PreviousPrompts(Static):
     """Siderail to display previous prompt sessions"""
     previous_prompts: list[str] = []
@@ -47,6 +56,21 @@ class Prompt(Static):
 
 class PromptResponse(Static):
 
+    response = ""
+
+    def __init__(self):
+        super().__init__("")
+        self._spinner = Spinner("material")
+    
+    def on_mount(self) -> None:
+        """Called when app starts."""
+        self.update_render = self.set_interval(1 / 60, self.update_spinner)
+    
+    def update_spinner(self) -> None:
+        """Updates the spinner."""
+        if self.response == "":
+            self.update(self._spinner)
+
     async def send_prompt(self, input_prompt: str):
         """Sends a prompt to openai's api."""
         model_engine = "text-davinci-003"
@@ -61,6 +85,7 @@ class PromptResponse(Static):
         log(f"completion: {completion} {type(completion)}")
 
         result  = completion.choices[0].text
+        self.response = result
 
         # animate typing the response
         for i in range(len(result)):
@@ -94,7 +119,7 @@ class ChatGPTui(App):
     
     async def action_add_prompt(self, input_prompt: str) -> None:
         """adds a prompt to the prompt list"""
-        prompt = Prompt(input_prompt)
+        prompt = Prompt(input_prompt, expand=True)
         self.mount(prompt)
         self.call_after_refresh(self.screen.scroll_end, animate=False)
         self.number_of_prompts += 1
@@ -112,7 +137,7 @@ class ChatGPTui(App):
     
     async def action_add_response(self, input_response: str) -> None:
         """adds a response to the response list"""
-        response = PromptResponse(Markdown("Thinking..."), name=f"response_{self.number_of_prompts}")
+        response = PromptResponse()
         self.mount(response)
         response.focus()
         await response.send_prompt(input_response)
