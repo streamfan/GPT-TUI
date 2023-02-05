@@ -8,9 +8,8 @@ from asgiref.sync import sync_to_async
 from rich.markdown import Markdown
 
 from textual.app import App, ComposeResult
-from textual.containers import Content, Container, Horizontal, Vertical
-from textual.widgets import Static, Input, Footer
-from textual.color import Color
+from textual.containers import Container, Vertical
+from textual.widgets import Static, Input, Button
 
 from rich.spinner import Spinner
 
@@ -36,25 +35,19 @@ class Capabilities(Static):
 class Limitations(Static):
     pass
 
+class PreviousChatButton(Button):
 
-class PreviousPrompts(Static):
-    """Siderail to display previous prompt sessions"""
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Called when the button is pressed."""
+        self.query_one(f"prompt_{str(event.button.id).replace('chat_button_', '')}").focus()
 
-    previous_prompts: list[str] = []
 
-    async def update_previous_prompts(self, input_prompt: str):
-        self.previous_prompts.append(input_prompt)
+class NewChatButton(Static):
+    pass
 
-        rail_markdown = ""
-        # print the previous prompts to the siderail in markdown
-        for prompt in self.previous_prompts:
-            # build a single markdown string
-            rail_markdown += f"# {prompt} \n"
 
-        # update the siderail
-        self.update(Markdown(rail_markdown))
-
-        log(f"previous prompts: {self.previous_prompts}")
+class PreviousPrompt(Static):
+    pass
 
 
 class Prompt(Static):
@@ -111,9 +104,14 @@ class ChatGPTui(App):
 
     def compose(self) -> ComposeResult:
         yield Input(placeholder="Enter a prompt...")
-        yield PreviousPrompts(id="previous_prompts")
+        yield Vertical(
+             id="previous_chats"
+        )
         yield Container(
-            Vertical(id="prompts_and_responses"),
+            Vertical(
+                id="prompts_and_responses"
+            ), 
+            id="prompts_and_responses_container"
         )
 
     def on_mount(self) -> None:
@@ -130,13 +128,13 @@ class ChatGPTui(App):
 
     async def action_add_prompt(self, input_prompt: str) -> None:
         """adds a prompt to the prompt list"""
-        prompt = Prompt(input_prompt, expand=True)
+        prompt = Prompt(input_prompt, expand=True, id=f"prompt_{self.number_of_prompts}")
         self.query_one("#prompts_and_responses").mount(prompt)
         self.call_after_refresh(self.screen.scroll_end, animate=False)
         self.number_of_prompts += 1
 
         # update the previous prompts
-        await self.query_one(PreviousPrompts).update_previous_prompts(input_prompt)
+        await self.query_one("#previous_chats").mount(PreviousChatButton(input_prompt, id=f"chat_button_{self.number_of_prompts}"))
 
         # get the number of characters in the prompt
         prompt_length = len(input_prompt)

@@ -8,20 +8,48 @@ Screen {
 
 Input {
     dock: bottom;
-    row-span: 8;
-    column-span: 1;
 }
 
 Container {
-    column-span: 6;
+    height: 100%;
+    width: 100%;
+    background: #343541;
+}
+
+PreviousPrompt {
+    column-span: 2;
+    min-height: 5;
+}
+
+PreviousChatButton {
+    background: #343541;
+    width: 100%;
+    margin-left: 1;
+    margin: 1;
+}
+
+#previous_chats {
+    background: #202123;
+    column-span: 2;
     row-span: 8;
     height: 100%;
+}
+
+#prompts_and_responses_container {
+    column-span: 6;
+    row-span: 8;
     background: #343541;
 }
 
 #prompts_and_responses > Vertical{
-    width: 100%;
     column-span: 6;
+    height: 100%;
+    background: #202123;
+}
+
+#previous_prompts > Vertical {
+    width: 100%;
+    column-span: 2;
     row-span: 8;
     height: 100%;
     background: #202123;
@@ -52,10 +80,8 @@ PromptResponse {
     row-span: 3;
 }
 
-PreviousPrompts {
-    row-span: 8;
-    column-span: 2;
-    height: 100%;
+PreviousPrompt {
+    column-span: 4;
     background: #202123;
 }
 
