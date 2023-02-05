@@ -4,6 +4,15 @@ A TUI to interact with ChatGPT!
 This is a reactive application that runs entirely in your terminal.
 It will adjust to the window size dynamically as well as font size.
 
+<img width="925" alt="image" src="https://user-images.githubusercontent.com/4359920/216850728-e9ad0218-ac9c-4347-bfb4-2c846f7b2685.png">
+
+<img width="912" alt="image" src="https://user-images.githubusercontent.com/4359920/216850782-dd5cce96-5f37-471d-bd7d-24d3b802187c.png">
+
+<img width="460" alt="image" src="https://user-images.githubusercontent.com/4359920/216850793-2490a85c-2263-4ca4-a4e5-9aa46013962b.png">
+
+<img width="1904" alt="image" src="https://user-images.githubusercontent.com/4359920/216850803-70daf9d1-2eb8-4ea1-80a2-94ec96287c59.png">
+
+
 It uses [Textual](https://www.textualize.io/) and [Rich](https://github.com/Textualize/rich) for formatting outputs.
 
 
